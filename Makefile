@@ -11,7 +11,7 @@ ZTFILE=/var/lib/zerotier-one/networks.d/$(ZTNET).conf
 VIMDEFAULTS=$(wildcard /usr/share/vim/*/defaults.vim)
 
 .PHONY: setup
-setup: /usr/bin/ffmpeg /root/.gitconfig /etc/bashrc.local /root/.ssh/authorized_keys /etc/tdarr.name $(ZTFILE)
+setup: /usr/bin/ffmpeg /root/.screenrc /root/.gitconfig /etc/bashrc.local /root/.ssh/authorized_keys /etc/tdarr.name $(ZTFILE)
 	@for x in $(VIMDEFAULTS); do sed -i 's/\ set mouse=/\ \"set mouse=/' $$x; done;
 	@IP=$$(ip addr | grep $(VPNNET)); if [ ! "$$IP" ]; then echo "Ask xrobau to approve this zerotier endpoint called $$(cat /etc/tdarr.name)"; /usr/sbin/zerotier-cli status; exit 1; else echo "VPN IP is $$(echo $$IP | cut -d\  -f2), mount should now work"; fi
 	@echo "Run 'make node' to install Tdarr_Node"
@@ -50,6 +50,9 @@ bash /etc/bashrc.local: bashrc.local
 git /root/.gitconfig: gitconfig
 	cp gitconfig /root/.gitconfig
 
+/root/.screenrc: screenrc
+	cp $< $@
+
 /etc/systemd/system/tdarr_node.service: tdarr_node.service /etc/tdarr_node.name
 	@NODENAME="$$(cat /etc/tdarr_node.name)"; sed -e "s/__NODENAME__/$$NODENAME/" -e "s@__NODEPATH__@$(shell pwd)/Tdarr_Node/Tdarr_Node@" < $< > $@
 
@@ -58,7 +61,12 @@ node: configs/Tdarr_Node_Config.json | Tdarr_Node/Tdarr_Node
 	@echo 'Node config is ready. Run this, or run "make service" to install the service'
 	@echo '/usr/bin/screen -dmS tdarr-node $(shell pwd)/Tdarr_Node/Tdarr_Node'
 
-Tdarr_Node/Tdarr_Node: Tdarr_Updater
+#ln -sf /usr/lib/x86_64-linux-gnu/libtesseract.so.5 /usr/lib/x86_64-linux-gnu/libtesseract.so.4 && sudo ldconfig
+/usr/lib/x86_64-linux-gnu/libtesseract.so.4: /usr/lib/x86_64-linux-gnu/libtesseract.so.5
+	ln -sf $< $@
+	ldconfig
+
+Tdarr_Node/Tdarr_Node: Tdarr_Updater | /usr/lib/x86_64-linux-gnu/libtesseract.so.4
 	@ls -al $@
 
 Tdarr_Updater:
