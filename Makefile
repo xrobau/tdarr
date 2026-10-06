@@ -11,7 +11,7 @@ ZTFILE=/var/lib/zerotier-one/networks.d/$(ZTNET).conf
 VIMDEFAULTS=$(wildcard /usr/share/vim/*/defaults.vim)
 
 .PHONY: setup
-setup: /root/.gitconfig /etc/bashrc.local /root/.ssh/authorized_keys /etc/tdarr.name $(ZTFILE) /usr/bin/ffmpeg
+setup: /usr/bin/ffmpeg /root/.gitconfig /etc/bashrc.local /root/.ssh/authorized_keys /etc/tdarr.name $(ZTFILE)
 	@for x in $(VIMDEFAULTS); do sed -i 's/\ set mouse=/\ \"set mouse=/' $$x; done;
 	@IP=$$(ip addr | grep $(VPNNET)); if [ ! "$$IP" ]; then echo "Ask xrobau to approve this zerotier endpoint called $$(cat /etc/tdarr.name)"; /usr/sbin/zerotier-cli status; exit 1; else echo "VPN IP is $$(echo $$IP | cut -d\  -f2), mount should now work"; fi
 	@echo "Run 'make node' to install Tdarr_Node"
