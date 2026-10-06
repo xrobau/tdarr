@@ -1,0 +1,4 @@
+bind 'set enable-bracketed-paste off'
+export EDITOR=vim
+export VISUAL=vim
+alias more='more -e'

@@ -1,0 +1,9 @@
+*
+!.gitignore
+!Makefile
+!authorized_keys
+!node_conf.template
+!tdarr_node.service
+!gitconfig
+!bashrc.local
+

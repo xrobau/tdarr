@@ -1,0 +1,16 @@
+[Unit]
+Description=Tdarr Node for __NODENAME__
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=0
+
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/screen -dmS tdarr-node __NODEPATH__
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,24 @@
+{
+  "startPaused": false,
+  "nodeName": "__NODENAME__",
+  "serverURL": "http://172.20.24.3:8266",
+  "serverIP": "0.0.0.0",
+  "serverPort": "8266",
+  "handbrakePath": "",
+  "ffmpegPath": "",
+  "mkvpropeditPath": "",
+  "pathTranslators": [
+    {
+      "server": "",
+      "node": ""
+    }
+  ],
+  "nodeType": "mapped",
+  "unmappedNodeCache": "/root/unmappedNodeCache",
+  "logLevel": "INFO",
+  "priority": 0,
+  "cronPluginUpdate": "",
+  "apiKey": "",
+  "maxLogSizeMB": 10,
+  "pollInterval": 2000
+}
